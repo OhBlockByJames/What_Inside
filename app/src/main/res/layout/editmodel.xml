@@ -1,0 +1,111 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="700dp" >
+
+        <TextView
+            android:id="@+id/textViewFormName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="Create Model"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textViewFormName"
+            android:layout_marginTop="10dp"
+            android:text="Name"
+            android:textColor="#FFFFFF" />
+
+        <requestFocus />
+
+        <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textViewName"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/roundedtextview"
+            android:ems="10"
+            android:hint="Name"
+            android:inputType="textPersonName"
+            android:paddingLeft="15dp" />
+
+        <TextView
+            android:id="@+id/textViewLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/editTextName"
+            android:layout_below="@+id/editTextName"
+            android:layout_marginTop="15dp"
+            android:text="Location"
+            android:textColor="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/editTextLocation"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_alignLeft="@+id/textViewLocation"
+            android:layout_below="@+id/textViewLocation"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/roundedtextview"
+            android:ems="10"
+            android:hint="Location"
+            android:inputType="textPersonName"
+            android:paddingLeft="15dp" />
+
+        <TextView
+            android:id="@+id/textViewTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextLocation"
+            android:layout_marginTop="15dp"
+            android:text="Time"
+            android:textColor="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/editTextTime"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_below="@+id/textViewTime"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/roundedtextview"
+            android:ems="10"
+            android:hint="Time"
+            android:inputType="phone"
+            android:paddingLeft="15dp" />
+
+        <Button
+            android:id="@+id/DoneButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewTime"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="106dp"
+            android:background="@drawable/buttonstyle"
+            android:text="Done" />
+
+    </RelativeLayout>
+
+</ScrollView>

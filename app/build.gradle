@@ -1,0 +1,73 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
+
+android {
+    compileSdkVersion 31
+    defaultConfig {
+        applicationId "com.google.ar.core.examples.java.helloar2"
+
+        // AR Optional apps must declare minSdkVersion >= 14.
+        // AR Required apps must declare minSdkVersion >= 24.
+        minSdkVersion 24
+        targetSdkVersion 31
+        versionCode 1
+        versionName '1.0'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    // ARCore (Google Play Services for AR) library.
+    implementation 'com.google.ar:core:1.26.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    // Obj - a simple Wavefront OBJ file loader
+    // https://github.com/javagl/Obj
+    implementation 'de.javagl:obj:0.2.1'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.firebase:firebase-database:20.0.1'
+    implementation 'com.google.firebase:firebase-auth:21.0.1'
+    implementation 'com.github.f0ris.sweetalert:library:1.6.2'
+    // ARCore (Google Play Services for AR) library.
+    implementation 'com.google.ar:core:1.25.0'
+
+    // Obj - a simple Wavefront OBJ file loader
+    // https://github.com/javagl/Obj
+    implementation 'de.javagl:obj:0.2.1'
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
+
+    //add
+    implementation 'com.google.firebase:firebase-database:16.0.5'
+    implementation 'com.google.guava:guava:27.0.1-android'
+    implementation 'com.google.firebase:firebase-database-ktx'
+    implementation 'com.google.firebase:firebase-database'
+    //firebase bom
+    implementation platform('com.google.firebase:firebase-bom:28.3.1')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-auth'
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    //implement google API
+    implementation 'com.google.maps.android:android-maps-utils:2.2.3'
+}
