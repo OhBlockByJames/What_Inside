@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textView1"
         android:layout_centerHorizontal="true"
-        android:text="Your awesome app"
+        android:text="Your new gateway for a 3D world."
         android:textAlignment="center"
         android:textColor="#ffffff"
         android:textSize="18sp"
@@ -104,6 +104,6 @@
         android:layout_marginRight="58dp"
         android:layout_marginBottom="104dp"
         android:background="@drawable/buttonstyle"
-        android:text="Login" />
+        android:text="Subscribe" />
 
 </RelativeLayout>

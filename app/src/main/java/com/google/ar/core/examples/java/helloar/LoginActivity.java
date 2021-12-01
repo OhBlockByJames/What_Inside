@@ -32,6 +32,10 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         mAuth = FirebaseAuth.getInstance();
+        username= (TextView) findViewById(R.id.editTextusername);
+        username.setText("root@gmail.com");
+        password=(TextView) findViewById(R.id.editTextpassword);
+        password.setText("root1234");
         login=(Button)findViewById(R.id.buttonlogin);
         login.setOnClickListener(new OnClickListener() {
             @Override

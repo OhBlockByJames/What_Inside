@@ -25,7 +25,6 @@ import java.util.ArrayList;
 
 public class DrawingPointFromDB extends Activity {
     private DatabaseReference rootRef;
-    private DatabaseReference childRef;
 
     private ValueEventListener valueEventListener;
     private static final String TAG = "upload...";
@@ -43,7 +42,6 @@ public class DrawingPointFromDB extends Activity {
     public DatabaseReference UserName;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myNextChild;
-    private FirebaseUser user;
     //暫存
     private ArrayList<Point> points;
 

@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".middlePoint">
+    tools:context=".middlePoint"
+    android:background="@drawable/background">
 
     <Button
         android:id="@+id/midbutton"
-        android:layout_width="228dp"
-        android:layout_height="148dp"
-        android:text="Button"
+        android:layout_width="210dp"
+        android:layout_height="99dp"
+        android:background="@drawable/buttonstyle"
+        android:text="Browse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +29,9 @@
         android:id="@+id/textView4"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="TextView"
+        android:text=" "
+        android:textSize="18dp"
+        android:textColor="@color/button_text_color"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

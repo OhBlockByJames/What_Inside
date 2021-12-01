@@ -411,25 +411,10 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
             }*/
         //存入一個儲存用Class
         PointCloudSaving.pointC = pc;
-        //Intent intent = new Intent(this, PointCloudDrawing.class);
-        //8/30 change activity
-        //Intent intent = new Intent(this, DrawingPointFromDB.class);
         //9/9 change activity
         Intent intent = new Intent(this, DrawingPointFromDB.class);
         //intent.putExtra("data",pc);
         startActivity(intent);
-
-        //09\28
-        //存入Firebase內
-        /*mDatabase= FirebaseDatabase.getInstance().getReference();
-        pp=PointCloudSaving.pointC;
-        myRef=mDatabase.child("test");
-        for(com.google.ar.core.examples.java.common.helpers.Point p:pp){
-            //用push()製造一個全新的子點以供辨識
-            myNextChild = myRef.push();
-            //在子點內儲存值
-            myNextChild.setValue(p);
-        }*/
     }
 
     /**
@@ -1453,7 +1438,7 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
         }
     }
     private void setNewAnchor(Anchor newAnchor) {
-        if (anchors.size()>30) {
+        if (anchors.size()>80) {
             anchor.detach();
         }
         anchor = newAnchor;
@@ -1471,8 +1456,5 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
         anchorPreferences.edit().putString(HOSTED_ANCHOR_NAMES, hostedAnchorNames).apply();
         anchorPreferences.edit().putString(HOSTED_ANCHOR_MINUTES, hostedAnchorMinutes).apply();
     }
-    private static int getNumStoredAnchors(SharedPreferences anchorPreferences) {
-        String hostedAnchorIds = anchorPreferences.getString(ScanActivity.HOSTED_ANCHOR_IDS, "");
-        return hostedAnchorIds.split(";", -1).length - 1;
-    }
+
 }
