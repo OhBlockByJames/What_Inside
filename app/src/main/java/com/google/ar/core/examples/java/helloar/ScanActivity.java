@@ -1120,8 +1120,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
 
                     Anchor anchor = session.createAnchor(pose);
                     //cloudanchor
-                    Anchor cloud_anchor = session.createAnchor(pose);
-                    anchors.add(anchor);
                     Session.FeatureMapQuality quality = session.estimateFeatureMapQualityForHosting(frame.getCamera().getPose());
                     Log.d("quality: ",quality+"");
                     Anchor.CloudAnchorState state = anchor.getCloudAnchorState();
@@ -1130,30 +1128,7 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
                         return;
                     }
                     anchor = session.hostCloudAnchor(anchor);
-                    //cloudAnchorManager.hostCloudAnchor(anchor, new HostListener());
-//                    Toast.makeText(getApplicationContext(),"Cloud Anchor id:"+anchor.getCloudAnchorId(),duration).show();
-//                    Log.d("Cloud Anchor id: ",anchor.getCloudAnchorId());
-                    Log.d("Cloud Anchor state: ",anchor.getCloudAnchorState()+"");
-                    if (quality==SUFFICIENT||quality==GOOD&&cameraTrackingState==TrackingState.TRACKING){
-                        try{
-                            cloudAnchorManager.hostCloudAnchor(cloud_anchor, new HostListener());
-                            //Toast.makeText(getApplicationContext(),"Cloud Anchor id:"+anchor.getCloudAnchorId(),duration).show();
-                            Log.d("Cloud Anchor id: ",cloud_anchor.getCloudAnchorId());
-                            Log.d("cloud anchor","works");
-                            //anchor = session.hostCloudAnchor(anchor);
-                            //cloudAnchorManager.hostCloudAnchor(anchor, new HostListener());
-                            String cloudAnchorID = cloud_anchor.getCloudAnchorId();
-                            Log.d("Cloud Anchor id: ",cloudAnchorID);
-                            appAnchorState = AppAnchorState.HOSTING;
-                            Log.d("Cloud Anchor state: ",anchor.getCloudAnchorState()+"");
-                        }
-                        catch(CloudAnchorsNotConfiguredException e){
-                            Log.d("anchor exception"," CloudAnchorsNotConfiguredException");
-                        }
-                    }
-                    else{
-                        Log.d("Quality Insufficient: ",quality+"");
-                    }
+
 
                     // Write a message to the database
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -1409,52 +1384,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
         }
         session.configure(config);
     }
-    protected Config getSessionConfiguration(Session session) {
-        Config config = new Config(session);
-        //getPlaneDiscoveryController().setInstructionView(null);
-        config.setCloudAnchorMode(Config.CloudAnchorMode.ENABLED);
-        config.setFocusMode(Config.FocusMode.AUTO);
-        session.configure(config);
-        return config;}
-    /* Listens for a hosted anchor. */
-    private final class HostListener implements CloudAnchorManager.CloudAnchorListener {
-        private String cloudAnchorId;
-        @Override
-        public void onComplete(Anchor anchor) {
-            runOnUiThread(
-                    () -> {
-                        Toast.makeText(getApplicationContext(), "Hello", Toast.LENGTH_SHORT).show();
-                        Anchor.CloudAnchorState state = anchor.getCloudAnchorState();
-                        if (state.isError()) {
-                            Log.e(TAG, "Error hosting a cloud anchor, state " + state);
-                            return;
-                        }
-                        Preconditions.checkState(
-                                cloudAnchorId == null, "The cloud anchor ID cannot have been set before.");
-                        cloudAnchorId = anchor.getCloudAnchorId();
-                        setNewAnchor(anchor);
-                        Log.i(TAG, "Anchor " + cloudAnchorId + " created.");
-                    });
-        }
-    }
-    private void setNewAnchor(Anchor newAnchor) {
-        if (anchors.size()>80) {
-            anchor.detach();
-        }
-        anchor = newAnchor;
-    }
 
-
-    private static void saveAnchorToStorage(String anchorId, String anchorNickname, SharedPreferences anchorPreferences) {
-        String hostedAnchorIds = anchorPreferences.getString(HOSTED_ANCHOR_IDS, "");
-        String hostedAnchorNames = anchorPreferences.getString(HOSTED_ANCHOR_NAMES, "");
-        String hostedAnchorMinutes = anchorPreferences.getString(HOSTED_ANCHOR_MINUTES, "");
-        hostedAnchorIds += anchorId + ";";
-        hostedAnchorNames += anchorNickname + ";";
-        hostedAnchorMinutes += TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()) + ";";
-        anchorPreferences.edit().putString(HOSTED_ANCHOR_IDS, hostedAnchorIds).apply();
-        anchorPreferences.edit().putString(HOSTED_ANCHOR_NAMES, hostedAnchorNames).apply();
-        anchorPreferences.edit().putString(HOSTED_ANCHOR_MINUTES, hostedAnchorMinutes).apply();
-    }
 
 }

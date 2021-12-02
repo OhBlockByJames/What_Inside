@@ -90,7 +90,7 @@
         <activity android:name=".middlePoint" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBiqA9NJcufe9ybf-Dtfp79tysI1zKew-w" />
+            android:value="AIzaSyBd2y3Z0c00AgnalUZfvL2dOz3mJ_62l20" />
 
     </application>
 
