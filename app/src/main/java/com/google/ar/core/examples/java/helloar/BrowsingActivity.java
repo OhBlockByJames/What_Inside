@@ -36,6 +36,8 @@ public class BrowsingActivity extends Activity {
     public Object object;
     public String currentSelectedBuilding;
     public String userUID;
+    public Spinner buildings;
+    public ArrayAdapter<String> ad;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mDatabase= FirebaseDatabase.getInstance().getReference();
@@ -43,7 +45,7 @@ public class BrowsingActivity extends Activity {
         setContentView(R.layout.activity_browsing);
 
         //get the spinner from the xml.
-        Spinner buildings = findViewById(R.id.BuildingSpinner);
+        buildings = findViewById(R.id.BuildingSpinner);
 
 
         //instantiate lists
@@ -83,7 +85,7 @@ public class BrowsingActivity extends Activity {
                 for(int i=0;i<b.size();i++){
                     buildinglist[i]=b.get(i);
                 }
-                ArrayAdapter<String> ad = new ArrayAdapter<String>(BrowsingActivity.this, android.R.layout.simple_spinner_item,buildinglist);
+                ad = new ArrayAdapter<String>(BrowsingActivity.this, android.R.layout.simple_spinner_item,buildinglist);
                 buildings.setAdapter(ad);
                 buildings.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -100,6 +102,9 @@ public class BrowsingActivity extends Activity {
                         for(int i=0;i<u.size();i++){
                             usersList[i]=u.get(i);
                         }
+                        //mySpinner.setSelection(arrayAdapter.getPosition("Category 2"));
+                        //看看有沒有取值?
+                        checkIfIntentPassed();
                         setLowerSpinners();
                     }
 
@@ -149,5 +154,15 @@ public class BrowsingActivity extends Activity {
         intent.putExtra("userUID", userUID);
         intent.putExtra("buildingName",currentSelectedBuilding);
         startActivity(intent);
+    }
+    public void checkIfIntentPassed(){
+        Intent intent=getIntent();
+        //Check Gates
+        String place=intent.getStringExtra("CheckPlace");
+        Log.d(TAG, "checkIfIntentPassed: "+place);
+        if(place!="None"){
+            buildings.setSelection(ad.getPosition(place));
+        };
+
     }
 }

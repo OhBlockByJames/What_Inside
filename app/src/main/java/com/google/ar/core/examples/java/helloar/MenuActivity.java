@@ -58,6 +58,7 @@ public class MenuActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MenuActivity.this,BrowsingActivity.class);
+                intent.putExtra("CheckPlace","None");
                 startActivity(intent);
             }
         });
