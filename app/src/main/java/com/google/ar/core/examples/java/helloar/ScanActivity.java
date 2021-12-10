@@ -1,24 +1,10 @@
 package com.google.ar.core.examples.java.helloar;
-/*
- * Copyright 2017 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.media.Image;
+import android.net.Uri;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -121,13 +107,8 @@ import static com.google.ar.core.Session.FeatureMapQuality.SUFFICIENT;
 public class ScanActivity extends AppCompatActivity implements SampleRender.Renderer {
 
     private static final String TAG = ScanActivity.class.getSimpleName();
-    private static final String TAG2 = "BRUH";
-
     private static final String SEARCHING_PLANE_MESSAGE = "Searching for surfaces...";
     private static final String WAITING_FOR_TAP_MESSAGE = "Tap on a surface to place an object.";
-
-    // See the definition of updateSphericalHarmonicsCoefficients for an explanation of these
-    // constants.
     private static final float[] sphericalHarmonicFactors = {
             0.282095f,
             -0.325735f,
@@ -239,16 +220,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
     private final Object anchorLock = new Object();
     private Anchor anchor;
 
-    //8/27
-    //firebase
-    private FirebaseDatabase mFirebaseDatabase;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private DatabaseReference myRef;
-    private DatabaseReference myNextChild;
-    public ArrayList<com.google.ar.core.examples.java.common.helpers.Point>pp;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -272,21 +243,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
 
         // Set up renderer.
         render = new SampleRender(surfaceView, this, getAssets());
-
-        //add resolve button.
-        Button resolveButton=(Button)findViewById(R.id.resolving);
-        EditText resolveInput=(EditText)findViewById(R.id.input_anchor);
-        //resolve button initiated.
-        resolveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String resolve_ID=resolveInput.getText().toString();
-                Toast.makeText(getApplicationContext(), "resolve ID: "+resolve_ID, Toast.LENGTH_SHORT).show();
-                Log.d("resolve ID: ",resolve_ID);
-                resolveCloudAnchor(resolve_ID);
-            }
-        });
-
 
         //toggleButton初始化
         toggleButton = findViewById(R.id.ToggleButton);
@@ -335,55 +291,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
                         popup.show();
                     }
                 });
-
-//      depthRender=new SampleRender(depthSurfaceView, new SampleRender.Renderer() {
-//      @Override
-//      public void onSurfaceCreated(SampleRender render) {
-//        depthBackgroundRender=new BackgroundRenderer(render);
-//      }
-//
-//      @Override
-//      public void onSurfaceChanged(SampleRender render, int width, int height) {
-//
-//      }
-//
-//      @Override
-//      public void onDrawFrame(SampleRender render) {
-//        if(session==null)
-//          return;
-//        if(session.isDepthModeSupported(Config.DepthMode.AUTOMATIC)==false)
-//          return;
-//
-//        Frame frame=null;
-//        try {
-//          frame = session.update();
-//        } catch (CameraNotAvailableException e) {
-//          Log.e(TAG, "Camera not available during onDrawFrame", e);
-//          messageSnackbarHelper.showError(HelloArActivity.this , "Camera not available. Try restarting the app.");
-//          return;
-//        }
-//
-//        Camera camera=frame.getCamera();
-//        if (camera.getTrackingState() != TrackingState.TRACKING)
-//          return;
-//
-//        try {
-//          depthBackgroundRender.setUseDepthVisualization(render,true);
-//        } catch (IOException e) {
-//          Log.e(TAG, "Failed to read a required asset file", e);
-//          messageSnackbarHelper.showError(HelloArActivity.this, "Failed to read a required asset file: " + e);
-//        }
-//        depthBackgroundRender.updateDisplayGeometry(frame);
-//        try(Image depthImage=frame.acquireCameraImage()) {
-//          depthBackgroundRender.updateCameraDepthTexture(depthImage);
-//        } catch (NotYetAvailableException e) {
-//          e.printStackTrace();
-//        }
-//        depthBackgroundRender.drawBackground(render);
-//
-//
-//      }
-//    },getAssets());
     }
     //add for resolve
     public Anchor resolveCloudAnchor(String cloudAnchorId){
@@ -405,15 +312,10 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
     //
 
     private void passTwoD() {
-            /*degView=findViewById(R.id.textdeg);
-            for(com.google.ar.core.examples.java.common.helpers.Point p:PointCloudSaving.pointC){
-                degView.append(""+p.getX()+p.getY()+p.getZ());
-            }*/
         //存入一個儲存用Class
         PointCloudSaving.pointC = pc;
         //9/9 change activity
         Intent intent = new Intent(this, DrawingPointFromDB.class);
-        //intent.putExtra("data",pc);
         startActivity(intent);
     }
 
@@ -434,10 +336,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
     @Override
     protected void onDestroy() {
         if (session != null) {
-            // Explicitly close ARCore Session to release native resources.
-            // Review the API reference for important considerations before calling close() in apps with
-            // more complicated lifecycle requirements:
-            // https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/Session#close()
             session.close();
             session = null;
         }
@@ -534,8 +432,7 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
         super.onRequestPermissionsResult(requestCode, permissions, results);
         if (!CameraPermissionHelper.hasCameraPermission(this)) {
             // Use toast instead of snackbar here since the activity will exit.
-            Toast.makeText(this, "Camera permission is needed to run this application", Toast.LENGTH_LONG)
-                    .show();
+            Toast.makeText(this, "Camera permission is needed to run this application", Toast.LENGTH_LONG).show();
             if (!CameraPermissionHelper.shouldShowRequestPermissionRationale(this)) {
                 // Permission denied with checking "Do not ask again".
                 CameraPermissionHelper.launchPermissionSettings(this);
@@ -735,33 +632,9 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
         float[] viewProjectMatrix = new float[16];
         Matrix.multiplyMM(modelViewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
-//    if(camera.getTrackingState()==TrackingState.TRACKING && firstDraw  ){
-//      List<HitResult> hitResults=frame.hitTestInstantPlacement(500,1000,1f);
-//      int x=500;
-//      int y=500;
-//      List<HitResult> hitResults=frame.hitTestInstantPlacement(x,y,2f);
-//      if(hitResults.size() > 0){
-//
-//        HitResult hit = hitResults.get(0);
-//        Pose hitPose=hit.getHitPose();
-//        float[] xyzw=PointCloudHelper.screenPointToRay(x,y,0,viewWidth,viewHeight,viewProjectMatrix);
-//        float[] xyz={xyzw[0],xyzw[1],xyzw[1]};
-//        float[] ori={0,0,0,1};
-//        Pose pose=new Pose(xyz,ori);
-//        Anchor pAnchor=session.createAnchor(pose);
-//
-//        Anchor anchor=hit.createAnchor();
-//        anchors.add(anchor);
-//        anchors.add(pAnchor);
-//        firstDraw=false;
-//      }
-//    }
         autoScan(frame, camera, toggleMode);
 
         backgroundRenderer.drawBackground(render);
-
-        // Handle one tap per frame.
-        //handleTap(frame, camera);
 
         //add
         cloudAnchorManager.onUpdate();
@@ -808,23 +681,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
             return;
         }
 
-        // -- Draw non-occluded virtual objects (planes, point cloud)
-
-
-//    PointCloudHelper.GetPointCloud(frame,viewWidth,viewHeight,10);
-
-//    pointCloudValue=PointCloudHelper.CalcPointCloud(modelViewProjectionMatrix,viewWidth,viewHeight,10);
-//    try (Image cameraImage = frame.acquireCameraImage()){
-//      long currentCameraTimestamp=cameraImage.getTimestamp();
-//      if(currentCameraTimestamp > lastCameraImageTimestamp){
-//        PointCloudHelper.WriteImageToSD(this,cameraImage);
-//        lastCameraImageTimestamp=currentCameraTimestamp;
-//      }
-//    } catch (NotYetAvailableException e) {
-//      messageSnackbarHelper.showError(this, "Failed to Write a required asset file: " + e);
-//    }
-
-
         // Visualize tracked points.
         // Use try-with-resources to automatically release the point cloud.
         if (pointCloudValue == null) {
@@ -859,9 +715,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
         render.clear(virtualSceneFramebuffer, 0f, 0f, 0f, 0f);
         for (Anchor anchor : anchors) {
             TrackingState anchorTracjing = anchor.getTrackingState();
-//      if (anchor.getTrackingState() != TrackingState.TRACKING) {
-//        continue;
-//      }
 
             // Get the current pose of an Anchor in world space. The Anchor pose is updated
             // during calls to session.update() as ARCore refines its estimate of the world.
@@ -886,26 +739,11 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
         float y = ycor;
         int colSum = viewHeight;
         int rowSum = viewWidth;
-        ByteBuffer originXBuffer = ByteBuffer.allocateDirect(colSum * rowSum);
-        ByteBuffer originYBuffer = ByteBuffer.allocateDirect(colSum * rowSum);
-        ByteBuffer worldXBuffer = ByteBuffer.allocateDirect(colSum * rowSum);
-        ByteBuffer worldYBuffer = ByteBuffer.allocateDirect(colSum * rowSum);
-        ByteBuffer worldZBuffer = ByteBuffer.allocateDirect(colSum * rowSum);
-        ByteBuffer DepthBuffer = ByteBuffer.allocateDirect(colSum * rowSum);
-        ByteBuffer ColorBuffer = ByteBuffer.allocateDirect(colSum * rowSum);
-        ByteBuffer colorABuffer = ByteBuffer.allocateDirect(colSum * rowSum);
-        ByteBuffer colorRBuffer = ByteBuffer.allocateDirect(colSum * rowSum);
-        ByteBuffer colorGBuffer = ByteBuffer.allocateDirect(colSum * rowSum);
-        ByteBuffer colorBBuffer = ByteBuffer.allocateDirect(colSum * rowSum);
-        ByteBuffer degBuffer = ByteBuffer.allocateDirect(colSum * rowSum);
-
         float depthXScale = 1;
         float depthYScale = 1;
         int bufferSize = viewHeight * viewWidth * 4;
         ByteBuffer colorBuffer = ByteBuffer.allocateDirect(bufferSize);
         ByteBuffer depthBuffer = ByteBuffer.allocateDirect(bufferSize / 2);
-
-//                originYBuffer.putInt(y);
 
         //用depth方法實驗
         int byteIndex = 0;
@@ -924,7 +762,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
             rowStride = plane.getRowStride();
             depthBuffer = plane.getBuffer();
         } catch (NotYetAvailableException e) {
-//            e.printStackTrace();
         }
 
         int xDepth = (int) (y * depthXScale);
@@ -933,21 +770,14 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
 
         int index = (int) ((viewHeight - y) * viewWidth + x) * 4;
         int b = colorBuffer.get(index) & 0xff;
-//                colorBBuffer.putInt(b);
         int g = colorBuffer.get(index + 1) & 0xff;
-//                colorGBuffer.putInt(g);
         int r = colorBuffer.get(index + 2) & 0xff;
-//                colorRBuffer.putInt(r);
         int a = colorBuffer.get(index + 3) & 0xff;
-//                colorABuffer.putInt(a);
         int color = 0xff000000 + (r << 16) + (g << 8) + b;
-//                ColorBuffer.putInt(color);
         byteIndex = (int) (xDepth * bytePerPixel + yDepth * rowStride);
         int depth1 = depthBuffer.get(byteIndex) & 0xff;
         int depth2 = depthBuffer.get(byteIndex + 1) & 0xff;
         short depth = (short) (depth1 + (depth2 << 8));
-//                DepthBuffer.putShort(depth);
-
         float[] cloudPoint = new float[4];
 
         float[] viewProjectMatrix = new float[16];
@@ -962,15 +792,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
         float[] ori = {0, 0, 0, 1f};
         Pose pose = new Pose(xyz, ori);
 
-        Anchor anchor = session.createAnchor(pose);
-        float finalDepthYScale = depthYScale;
-        float finalDepthXScale = depthXScale;
-        int finalDepthWidth = depthWidth;
-        int finalDepthHeight = depthHeight;
-//                worldXBuffer.putFloat(xyz[0]);
-//                worldYBuffer.putFloat(xyz[1]);
-//                worldZBuffer.putFloat(xyz[2]);
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -982,7 +803,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
                         depth, xDepth, yDepth);
                 degView.append(msg);
                 com.google.ar.core.examples.java.common.helpers.Point newPoint=new com.google.ar.core.examples.java.common.helpers.Point(xyz[0],xyz[1]/1000,xyz[2],a,r,g,b);
-                //pc.add(newPoint);
             }
         });
 
@@ -990,17 +810,7 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
     }
     private void autoScan(Frame frame, Camera camera, Boolean mode) {
         if (mode == true) {
-//            runOnUiThread(new Runnable() {
-//
-//                @Override
-//                public void run() {
-//
-//                    // Stuff that updates the UI
-//                    degView.append("autoScan Success!");
-//
-//                }
-//            });
-            //width 1080 height 2195
+
             int colSum = viewHeight;
             int rowSum = viewWidth;
 
@@ -1065,11 +875,7 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
                     ByteBuffer colorBuffer = ByteBuffer.allocateDirect(bufferSize);
                     ByteBuffer depthBuffer = ByteBuffer.allocateDirect(bufferSize / 2);
                     //GLE
-//          GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,backgroundRenderer.getCameraColorTexture().getTextureId());
                     GLES30.glReadPixels(0, 0, viewWidth, viewHeight, GLES30.GL_RGBA, GLES30.GL_UNSIGNED_BYTE, colorBuffer);
-//          GLES30.glBindTexture(GLES30.GL_TEXTURE_2D,backgroundRenderer.getCameraDepthTexture().getTextureId());
-//          GLES30.glReadPixels(0,0,viewWidth,viewHeight,GLES30.GL_RG8,GLES30.GL_UNSIGNED_BYTE,depthBuffer);
-
                     //基本資料型別設定
                     int byteIndex = 0;
                     int bytePerPixel = 2;
@@ -1087,7 +893,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
                         rowStride = plane.getRowStride();
                         depthBuffer = plane.getBuffer();
                     } catch (NotYetAvailableException e) {
-//            e.printStackTrace();
                     }
                     //翻轉=>XY互換且縮放
                     int xDepth = (int) (y * depthXScale);
@@ -1105,10 +910,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
                     int depth2 = depthBuffer.get(byteIndex + 1) & 0xff;
                     short depth = (short) (depth1 + (depth2 << 8));
 
-
-                    float[] cloudPoint = new float[4];
-
-
                     float[] xyzw = PointCloudHelper.screenPointToRay(x, y, depth, viewWidth, viewHeight, viewProjectMatrix);
                     float[] xyz = {
                             xyzw[0],
@@ -1119,37 +920,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
                     Pose pose = new Pose(xyz, ori);
 
                     Anchor anchor = session.createAnchor(pose);
-                    //cloudanchor
-                    Session.FeatureMapQuality quality = session.estimateFeatureMapQualityForHosting(frame.getCamera().getPose());
-                    Log.d("quality: ",quality+"");
-                    Anchor.CloudAnchorState state = anchor.getCloudAnchorState();
-                    if (state.isError()) {
-                        Log.e(TAG, "Error hosting a cloud anchor, state " + state);
-                        return;
-                    }
-                    anchor = session.hostCloudAnchor(anchor);
-
-
-                    // Write a message to the database
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference myRef = database.getReference("message");
-                    myRef.setValue(anchor.getCloudAnchorId());
-                    // Read from the database
-                    myRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            // This method is called once with the initial value and again
-                            // whenever data at this location is updated.
-                            String value = dataSnapshot.getValue(String.class);
-                            Log.d(TAG, "Firebase Cloud Anchor ID: " + value);
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError error) {
-                            // Failed to read value
-                            Log.w(TAG, "Failed to read value.", error.toException());
-                        }
-                    });
-
                     float finalDepthYScale = depthYScale;
                     float finalDepthXScale = depthXScale;
                     int finalDepthWidth = depthWidth;
@@ -1158,7 +928,7 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            String msg = String.format("widrh:%d height:%d deg:%f\r\nTapX:%f\tTapY:%f\r\nPose:%f %f %f\r\nx:%f\ty:%f\tz:%f\r\na:%d r:%d g:%d b:%d c:%d\r\ndepth:%d dx:%d dy:%d\r\ndepthHidth:%d depthHeight:%d\r\nxScale:%f yScale:%f",
+                            String msg = String.format("width:%d height:%d deg:%f\r\nTapX:%f\tTapY:%f\r\nPose:%f %f %f\r\nx:%f\ty:%f\tz:%f\r\na:%d r:%d g:%d b:%d c:%d\r\ndepth:%d dx:%d dy:%d\r\ndepthWidth:%d depthHeight:%d\r\nxScale:%f yScale:%f",
                                     viewWidth, viewHeight, deg,
                                     x, y,
                                     hitPos.tx(), hitPos.ty(), hitPos.tz(),
@@ -1167,22 +937,13 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
                                     depth, xDepth, yDepth,
                                     finalDepthWidth, finalDepthHeight,
                                     finalDepthXScale, finalDepthYScale);
-                            //cloudanchor add
-                            if (quality==INSUFFICIENT||quality==SUFFICIENT){
-                                Toast.makeText(getApplicationContext(), "Quality: "+quality+" TRACKING STATE: "+cameraTrackingState, Toast.LENGTH_SHORT).show();
-                            }
                             degView.setText(msg);
                             degView.setTextColor(color);
-//              degView.setBackgroundColor((Integer.reverse(color)&0xFFFFFF)+0xee000000);
                             degView.setBackgroundColor(0xeeffffff);
                             com.google.ar.core.examples.java.common.helpers.Point newPoint = new com.google.ar.core.examples.java.common.helpers.Point(xyz[0], xyz[1], xyz[2],a,r,g,b);
                             pc.add(newPoint);
                         }
                     });
-                    // Adding an Anchor tells ARCore that it should track this position in
-                    // space. This anchor is created on the Plane to place the 3D model
-                    // in the correct position relative both to the world and to the plane.
-//          anchors.add(hit.createAnchor());
 
                     anchors.add(anchor);
 
@@ -1336,19 +1097,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
     }
 
     private void updateSphericalHarmonicsCoefficients(float[] coefficients) {
-        // Pre-multiply the spherical harmonics coefficients before passing them to the shader. The
-        // constants in sphericalHarmonicFactors were derived from three terms:
-        //
-        // 1. The normalized spherical harmonics basis functions (y_lm)
-        //
-        // 2. The lambertian diffuse BRDF factor (1/pi)
-        //
-        // 3. A <cos> convolution. This is done to so that the resulting function outputs the irradiance
-        // of all incoming light over a hemisphere for a given surface normal, which is what the shader
-        // (environmental_hdr.frag) expects.
-        //
-        // You can read more details about the math here:
-        // https://google.github.io/filament/Filament.html#annex/sphericalharmonics
 
         if (coefficients.length != 9 * 3) {
             throw new IllegalArgumentException(

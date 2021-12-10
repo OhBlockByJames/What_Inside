@@ -68,19 +68,8 @@ public class OpenGLdemo extends Activity {
         private float mPreviousY;
         private final float TOUCH_SCALE_FACTOR = 0.6f;
         private final float AXIS_SCALE_FACTOR = 1.5f;
-        private final int AXIS_WIDTH = 10;
-        private final float POINT_WIDTH = 20f;
-        private int program;
         private int color_length;
         private int vertex_length;
-
-        //建立顏色array(r,g,b,a)
-        //宣告成全域變數
-
-
-        //建立位置array(x,y,z)
-        //宣告成全域變數
-
 
         public Feature_Points(Context context) {
             mContext = context;
@@ -97,17 +86,7 @@ public class OpenGLdemo extends Activity {
             gl.glRotatef(mAngleZ, 0, 0, 1);
             gl.glScalef(AXIS_SCALE_FACTOR, AXIS_SCALE_FACTOR, AXIS_SCALE_FACTOR);
             gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
-            //9/15 test
-            /*float colors[]={
-                    255,255,0,255,
-                    255,255,0,255,
-                    255,255,0,255,
-                    255,255,0,255,
-                    255,255,0,255,
-                    55,255,0,255,
-                    125,255,0,255,
-                    255,0,0,255,
-            };*/
+
             colors=ColorArray;
             Log.d("vertex length: ",""+vertex_length);
             //每四個r,g,b,a一組
@@ -119,7 +98,7 @@ public class OpenGLdemo extends Activity {
                 Log.d("OpenGL Error","座標和顏色組數不同");
             }
             //設定點大小
-            gl.glPointSize(20);
+            gl.glPointSize(10);
 
             for(int index=0;index<=color_length;index++){
 
@@ -154,10 +133,6 @@ public class OpenGLdemo extends Activity {
         }
 
         private void setAllBuffers(){
-            //9/15 test
-            /*float vertex_list[]={
-                    0.5f,0.5f,0.0f,1
-            };*/
             vertex_list=VertexArray;
             ByteBuffer vbb = ByteBuffer.allocateDirect(vertex_list.length * 4);
             vbb.order(ByteOrder.nativeOrder());

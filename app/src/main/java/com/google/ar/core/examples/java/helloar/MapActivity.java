@@ -45,8 +45,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         googleMap.setOnMarkerClickListener(this);
         mMap = googleMap;
 
-
-
         // Add a marker in Sydney and move the camera
         LatLng location_A = new LatLng(24.98669477712358, 121.57654715815653);
         LatLng location_B=new LatLng(24.98637112016357, 121.57541765152799);
@@ -55,18 +53,17 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         LatLng location_E=new LatLng(24.98718430066657, 121.57514647761452);
         LatLng location_F=new LatLng(24.986839760009055, 121.57391539546231);
         LatLng location_G=new LatLng(24.98834643808405, 121.57886438046648);
-//        LatLng location_=new LatLng();
+        //LatLng location_=new LatLng();
 
         commerce_marker=mMap.addMarker(new MarkerOptions().position(location_A).title("政大商院"));
         admin_marker=mMap.addMarker(new MarkerOptions().position(location_B).title("行政大樓"));
         library_marker=mMap.addMarker(new MarkerOptions().position(location_C).title("中正圖書館"));
-        general_marker=mMap.addMarker(new MarkerOptions().position(location_D).title("綜合院館"));;
-        information_building_marker=mMap.addMarker(new MarkerOptions().position(location_E).title("資訊大樓"));;
-        da_yong_building_marker=mMap.addMarker(new MarkerOptions().position(location_F).title("大勇樓"));;
-        uni_library_marker=mMap.addMarker(new MarkerOptions().position(location_G).title("達賢圖書館"));;
-
-//        mMap.addMarker(new MarkerOptions().position(location_B).title(""));
+        general_marker=mMap.addMarker(new MarkerOptions().position(location_D).title("綜合院館"));
+        information_building_marker=mMap.addMarker(new MarkerOptions().position(location_E).title("資訊大樓"));
+        da_yong_building_marker=mMap.addMarker(new MarkerOptions().position(location_F).title("大勇樓"));
+        uni_library_marker=mMap.addMarker(new MarkerOptions().position(location_G).title("達賢圖書館"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(location_A));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(16), 2000, null);
     }
 
 

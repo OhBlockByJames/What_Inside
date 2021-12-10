@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -65,6 +66,17 @@ public class middlePoint extends Activity {
             @Override
             public void onClick(View v) {
                 pass_intent_to_OpenGL();
+            }
+        });
+
+        Button ScannerButton = (Button)findViewById(R.id.show_return);
+        ScannerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://developer.arway.app/usr/Point-viewer.php?pcd=https://s3.ap-south-1.amazonaws.com/arway-map-upload-api/uploaded_maps/NElAhvKp6Sts3OuqBHzo/phpA4SeBv.pcd");
+                Intent it = new Intent(Intent.ACTION_VIEW,uri);
+                startActivity(it);
+
             }
         });
 

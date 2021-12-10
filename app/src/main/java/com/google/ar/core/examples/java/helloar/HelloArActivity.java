@@ -16,8 +16,11 @@
 
 package com.google.ar.core.examples.java.helloar;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.media.Image;
 import android.opengl.GLES30;
@@ -138,13 +141,6 @@ public class HelloArActivity extends AppCompatActivity implements SampleRender.R
 
   private final InstantPlacementSettings instantPlacementSettings = new InstantPlacementSettings();
   private boolean[] instantPlacementSettingsMenuDialogCheckboxes = new boolean[1];
-  // Assumed distance from the device camera to the surface on which user will try to place objects.
-  // This value affects the apparent scale of objects while the tracking method of the
-  // Instant Placement point is SCREENSPACE_WITH_APPROXIMATE_DISTANCE.
-  // Values in the [0.2, 2.0] meter range are a good choice for most AR experiences. Use lower
-  // values for AR experiences where users are expected to place objects on surfaces close to the
-  // camera. Use larger values for experiences where the user will likely be standing and trying to
-  // place an object on the ground or floor in front of them.
   private static final float APPROXIMATE_DISTANCE_METERS = 2.0f;
 
   // Point Cloud
@@ -214,6 +210,8 @@ public class HelloArActivity extends AppCompatActivity implements SampleRender.R
         startActivity(intent);
       }
     });
+
+
   }
 
   /** Menu button to launch feature specific settings. */
@@ -231,10 +229,6 @@ public class HelloArActivity extends AppCompatActivity implements SampleRender.R
   @Override
   protected void onDestroy() {
     if (session != null) {
-      // Explicitly close ARCore Session to release native resources.
-      // Review the API reference for important considerations before calling close() in apps with
-      // more complicated lifecycle requirements:
-      // https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/Session#close()
       session.close();
       session = null;
     }
@@ -295,12 +289,7 @@ public class HelloArActivity extends AppCompatActivity implements SampleRender.R
     // Note that order matters - see the note in onPause(), the reverse applies here.
     try {
       configureSession();
-      // To record a live camera session for later playback, call
-      // `session.startRecording(recorderConfig)` at anytime. To playback a previously recorded AR
-      // session instead of using the live camera feed, call
-      // `session.setPlaybackDataset(playbackDatasetPath)` before calling `session.resume()`. To
-      // learn more about recording and playback, see:
-      // https://developers.google.com/ar/develop/java/recording-and-playback
+
       session.resume();
     } catch (CameraNotAvailableException e) {
       messageSnackbarHelper.showError(this, "Camera not available. Try restarting the app.");

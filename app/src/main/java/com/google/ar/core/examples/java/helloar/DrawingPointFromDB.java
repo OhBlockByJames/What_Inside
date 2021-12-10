@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -58,7 +59,8 @@ public class DrawingPointFromDB extends Activity {
             @Override
             public void onClick(View v) {
                 upload_to_firebase();
-                Log.d(TAG, "onClick: " + name_input.getText().toString());
+                Toast.makeText(DrawingPointFromDB.this, "建築名稱: "+name_input.getText().toString(),
+                        Toast.LENGTH_LONG).show();
             }
         });
 
@@ -146,7 +148,6 @@ public class DrawingPointFromDB extends Activity {
                 }
             }
 
-
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
                 Log.d(TAG, "onCancelled: error.");
@@ -172,14 +173,9 @@ public class DrawingPointFromDB extends Activity {
     }
 
     public void pass_intent_to_OpenGL() {
-        /*Intent intent=new Intent(this,OpenGLdemo.class);
-        intent.putExtra("ColorArray",colors);
-        intent.putExtra("Vertex_Array",vertex_list);*/
         Intent intent = new Intent(this, middlePoint.class);
         intent.putExtra("userUID", mAuth.getCurrentUser().getUid());
         intent.putExtra("buildingName", name_input.getText().toString());
         startActivity(intent);
     }
-
-    ;
 }
