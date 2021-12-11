@@ -9,7 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.ar.core.examples.java.common.helpers.Point;
@@ -24,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class middlePoint extends Activity {
     private DatabaseReference rootRef;
@@ -46,11 +49,20 @@ public class middlePoint extends Activity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myNextChild;
     private FirebaseUser user;
-
+    private ArrayAdapter ad;
     public String building;
     public String userUIDcode;
     //暫存
     private ArrayList<Point> points;
+    private final String[] Commerce={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
+    private final String[] Social={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
+    private final String[] Information={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
+    private final String[] Admin={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
+    private final String[] Da_Yung={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
+    private final String[] JJZ_library={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
+    private final String[] DS_library={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
+
+    public Spinner spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +81,10 @@ public class middlePoint extends Activity {
             }
         });
 
+        setArrayAdapter();
+        Spinner spinner=findViewById(R.id.BuildingSpinner);
+        spinner.setAdapter(ad);
+
         Button ScannerButton = (Button)findViewById(R.id.show_return);
         ScannerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,8 +92,8 @@ public class middlePoint extends Activity {
                 Uri uri = Uri.parse("https://developer.arway.app/usr/Point-viewer.php?pcd=https://s3.ap-south-1.amazonaws.com/arway-map-upload-api/uploaded_maps/NElAhvKp6Sts3OuqBHzo/phpA4SeBv.pcd");
                 Intent it = new Intent(Intent.ACTION_VIEW,uri);
                 startActivity(it);
-
             }
+
         });
 
         //Authentication
@@ -232,4 +248,7 @@ public class middlePoint extends Activity {
         intent.putExtra("Vertex_Array",vertex_list);
         startActivity(intent);
     };
+    public void setArrayAdapter(){
+
+    }
 }
