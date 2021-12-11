@@ -54,14 +54,15 @@ public class middlePoint extends Activity {
     public String userUIDcode;
     //暫存
     private ArrayList<Point> points;
-    private final String[] Commerce={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
+    public final String[] Commerce={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
     private final String[] Social={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
-    private final String[] Information={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
-    private final String[] Admin={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
+    private final String[] Information={"1F","2F","3F","4F","5F"};
+    public final String[] Administration={"1F","2F","3F","4F","5F","6F","7F","8F"};
     private final String[] Da_Yung={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
     private final String[] JJZ_library={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
-    private final String[] DS_library={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
+    private final String[] DS_library={"1F","2F","3F","4F","5F","6F","7F","8F"};
 
+    public String[] finalize_building;
     public Spinner spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +81,6 @@ public class middlePoint extends Activity {
                 pass_intent_to_OpenGL();
             }
         });
-
-        setArrayAdapter();
-        Spinner spinner=findViewById(R.id.BuildingSpinner);
-        spinner.setAdapter(ad);
 
         Button ScannerButton = (Button)findViewById(R.id.show_return);
         ScannerButton.setOnClickListener(new View.OnClickListener() {
@@ -241,6 +238,7 @@ public class middlePoint extends Activity {
         TextView tv=findViewById(R.id.textView4);
         tv.append("You entered : "+building+"\n");
         tv.append("your userID is : "+userUIDcode+"\n");
+        setArrayAdapter();
     }
     public void pass_intent_to_OpenGL(){
         Intent intent=new Intent(this,OpenGLdemo.class);
@@ -249,6 +247,25 @@ public class middlePoint extends Activity {
         startActivity(intent);
     };
     public void setArrayAdapter(){
-
+        if(building.equals("達賢圖書館")){
+            finalize_building=DS_library; }
+        else if(building.equals("政大商院")){
+            finalize_building=Commerce;}
+        else if(building.equals("行政大樓")){
+            finalize_building=Administration;}
+        else if(building.equals("中正圖書館")){
+            finalize_building=JJZ_library;}
+        else if(building.equals("大勇樓")){
+            finalize_building=Da_Yung;}
+        else if(building.equals("綜合院館")){
+            finalize_building=Social;}
+        else if(building.equals("資訊大樓")){
+            finalize_building=Information;}
+        else{
+            finalize_building= new String[]{"查無資料，請新增樓層!"};
+        }
+        ad=new ArrayAdapter<String>(middlePoint.this, android.R.layout.simple_spinner_item,finalize_building);
+        Spinner spinner=findViewById(R.id.BuildingSpinner);
+        spinner.setAdapter(ad);
     }
 }
