@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.ktx.Firebase;
 
 import java.util.ArrayList;
 
@@ -47,21 +49,6 @@ public class BrowsingActivity extends Activity {
         //get the spinner from the xml.
         buildings = findViewById(R.id.BuildingSpinner);
 
-
-        //instantiate lists
-
-
-        /*
-        //create a list of items for the spinner.
-        String[] buildinglist = new String[]{"商院", "綜院", "大勇","大仁"};
-        String[] classroomlist = new String[]{"101", "202", "303","404"};
-        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
-        //There are multiple variations of this, but this is the basic variant.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, buildinglist);
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, classroomlist);
-        //set the spinners adapter to the previously created one.
-        buildings.setAdapter(adapter);
-        classrooms.setAdapter(adapter2);*/
         recyclerView = findViewById(R.id.LocationList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -102,7 +89,6 @@ public class BrowsingActivity extends Activity {
                         for(int i=0;i<u.size();i++){
                             usersList[i]=u.get(i);
                         }
-                        //mySpinner.setSelection(arrayAdapter.getPosition("Category 2"));
                         //看看有沒有取值?
                         checkIfIntentPassed();
                         setLowerSpinners();
@@ -113,14 +99,21 @@ public class BrowsingActivity extends Activity {
 
                     }
                 });
-                //下層:把上層取值丟進去
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("one", "Failed to read value", error.toException());
-
+                Toast.makeText(BrowsingActivity.this, "Failed to read value",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        Button deleteBtn=findViewById(R.id.delete);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDatabase.removeValue();
+                Toast.makeText(BrowsingActivity.this, "刪除資料庫成功",
+                        Toast.LENGTH_LONG).show();
             }
         });
         Button browseBtn=findViewById(R.id.browse_advance);

@@ -69,14 +69,22 @@ public class middlePoint extends Activity {
             }
         });
 
-        Button ScannerButton = (Button)findViewById(R.id.show_return);
-        ScannerButton.setOnClickListener(new View.OnClickListener() {
+        Button HomeButton = (Button)findViewById(R.id.home);
+        HomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(middlePoint.this, MenuActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button pointCloudButton = (Button)findViewById(R.id.pointCloud);
+        pointCloudButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse("https://developer.arway.app/usr/Point-viewer.php?pcd=https://s3.ap-south-1.amazonaws.com/arway-map-upload-api/uploaded_maps/NElAhvKp6Sts3OuqBHzo/phpA4SeBv.pcd");
                 Intent it = new Intent(Intent.ACTION_VIEW,uri);
                 startActivity(it);
-
             }
         });
 
@@ -157,64 +165,7 @@ public class middlePoint extends Activity {
                     }
 
                 }
-
-
-                /*for (DataSnapshot snapChild : snapshot.getChildren()) {
-                    for (DataSnapshot ds:snapChild.getChildren()) {
-                        //XYZ照下面這樣拿就好，但我不知道為啥float變成了double了...可能要轉個檔...之類的...?
-                        Double X = ds.child("x").getValue(Double.class);
-                        if (X != null) {
-                            float X1 = Float.valueOf(String.valueOf(X));
-                            vertex.add(X1);
-                        } else {
-                            Log.d(TAG, "onDataChange:null happened");
-                        }
-                        Double Y = ds.child("y").getValue(Double.class);
-                        if (Y != null) {
-                            float Y1 = Float.valueOf(String.valueOf(Y));
-                            vertex.add(Y1);
-                        } else {
-                            Log.d(TAG, "onDataChange: null expected");
-                        }
-                        Double Z = ds.child("z").getValue(Double.class);
-                        if (Z != null) {
-                            float Z1 = Float.valueOf(String.valueOf(Z));
-                            vertex.add(Z1);
-                        } else {
-                            Log.d(TAG, "onDataChange: null happened");
-                        }
-                        Integer R = ds.child("r").getValue(Integer.class);
-                        if (R != null) {
-                            color.add(R);
-
-                        }
-                        Integer G = ds.child("g").getValue(Integer.class);
-                        if (G != null) {
-                            color.add(G);
-                        }
-                        Integer B = ds.child("b").getValue(Integer.class);
-                        if (B != null) {
-                            color.add(B);
-                        }
-                        Integer A = ds.child("a").getValue(Integer.class);
-                        if (A != null) {
-                            color.add(A);
-                        }
-                    }
-
-                    colors = new float[color.size()];
-                    vertex_list = new float[vertex.size()];
-
-                    for (int i = 0; i <= color.size() - 1; i++) {
-                        float c = color.get(i);
-                        colors[i] = c / 255;
-                    }
-                    for (int i = 0; i <= vertex.size() - 1; i++) {
-                        vertex_list[i] = vertex.get(i);
-                    }
-                }*/
             }
-
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
