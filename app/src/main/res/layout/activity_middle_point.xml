@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.613" />
 
     <Button
-        android:id="@+id/show_return"
+        android:id="@+id/home"
         android:layout_width="106dp"
         android:layout_height="51dp"
         android:background="@drawable/buttonstyle"
@@ -29,6 +29,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        app:layout_constraintVertical_bias="0.949" />
+
+    <Button
+        android:id="@+id/pointCloud"
+        android:layout_width="106dp"
+        android:layout_height="51dp"
+        android:background="@drawable/buttonstyle"
+        android:text="Point Cloud"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.918"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         app:layout_constraintVertical_bias="0.949" />
