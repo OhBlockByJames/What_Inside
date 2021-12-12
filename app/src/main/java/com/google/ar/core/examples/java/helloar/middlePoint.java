@@ -55,11 +55,11 @@ public class middlePoint extends Activity {
     //暫存
     private ArrayList<Point> points;
     public final String[] Commerce={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
-    private final String[] Social={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
+    private final String[] Social={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F","13"};
     private final String[] Information={"1F","2F","3F","4F","5F"};
     public final String[] Administration={"1F","2F","3F","4F","5F","6F","7F","8F"};
     private final String[] Da_Yung={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
-    private final String[] JJZ_library={"1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F"};
+    private final String[] JJZ_library={"1F","2F","3F","4F","5F"};
     private final String[] DS_library={"1F","2F","3F","4F","5F","6F","7F","8F"};
 
     public String[] finalize_building;
@@ -99,9 +99,7 @@ public class middlePoint extends Activity {
                 Intent it = new Intent(Intent.ACTION_VIEW,uri);
                 startActivity(it);
             }
-
         });
-
         //Authentication
         mAuth= FirebaseAuth.getInstance();
         mFirebaseDatabase=FirebaseDatabase.getInstance();
@@ -181,6 +179,7 @@ public class middlePoint extends Activity {
                 }
             }
 
+
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
                 Log.d(TAG, "onCancelled: error.");
@@ -214,7 +213,7 @@ public class middlePoint extends Activity {
         else if(building.equals("資訊大樓")){
             finalize_building=Information;}
         else{
-            finalize_building= new String[]{"查無資料，請新增樓層!"};
+            finalize_building= new String[]{"查無樓層資料，請新增樓層!"};
         }
         ad=new ArrayAdapter<String>(middlePoint.this, android.R.layout.simple_spinner_item,finalize_building);
         Spinner spinner=findViewById(R.id.BuildingSpinner);

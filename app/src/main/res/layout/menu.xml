@@ -35,7 +35,7 @@
             android:textColor="#ffffff"
             android:layout_marginLeft="120dp"
             android:textSize="40dp"
-            android:text="300"/>
+            />
 
     <ImageView
         android:layout_width="wrap_content"

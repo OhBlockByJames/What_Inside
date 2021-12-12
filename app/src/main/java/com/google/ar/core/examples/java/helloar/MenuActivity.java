@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -71,12 +73,12 @@ public class MenuActivity extends Activity {
                 startActivity(intent);
             }
         });
-
+        TextView userStarView=(TextView)findViewById(R.id.starText);
+        userStarView.setText(userStar.star+"");
 
         logout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 new SweetAlertDialog(MenuActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Well Done!")
                         .setContentText("You got 5 stars!")

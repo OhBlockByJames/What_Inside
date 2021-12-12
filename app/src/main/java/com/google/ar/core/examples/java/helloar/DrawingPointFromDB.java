@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class DrawingPointFromDB extends Activity {
     private DatabaseReference rootRef;
 
@@ -61,6 +63,18 @@ public class DrawingPointFromDB extends Activity {
                 upload_to_firebase();
                 Toast.makeText(DrawingPointFromDB.this, "建築名稱: "+name_input.getText().toString(),
                         Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(DrawingPointFromDB.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Well Done!")
+                        .setContentText("You got 50 stars!")
+                        .setConfirmText("Ok")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                userStar.star+=50;
+                                sDialog.dismissWithAnimation();
+                            }
+                        })
+                        .show();
             }
         });
 
