@@ -550,7 +550,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
         virtualSceneFramebuffer.resize(width, height);
         viewWidth = width;
         viewHeight = height;
-        //deg=displayRotationHelper.GetDisplayRotation();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -745,7 +744,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
         ByteBuffer colorBuffer = ByteBuffer.allocateDirect(bufferSize);
         ByteBuffer depthBuffer = ByteBuffer.allocateDirect(bufferSize / 2);
 
-        //用depth方法實驗
         int byteIndex = 0;
         int bytePerPixel = 2;
         int rowStride = 160;
@@ -816,7 +814,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
 
             for (int x = 0; x < rowSum; x += 100) {
                 for (int y = 0; y < colSum; y += 100) {
-//                Thread.sleep(5*1000);
                     try {
                         toWorldCoordinate(x, y, frame);
                     } catch (Exception e) {
@@ -867,7 +864,6 @@ public class ScanActivity extends AppCompatActivity implements SampleRender.Rend
                     float y = tap.getY();
                     float depthXScale = 1;
                     float depthYScale = 1;
-                    //??
                     float xStep = 1f / viewWidth;
                     float yStep = 1f / viewHeight;
                     //設定暫存區

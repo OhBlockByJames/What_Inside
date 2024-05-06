@@ -9,9 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -117,8 +115,6 @@ public class LoginActivity extends Activity {
                     Toast.LENGTH_SHORT).show();
         }
         else{
-            //String userName = user.getDisplayName();
-            //這等HARVEY再修
             String userid=user.getUid();
             Toast.makeText(LoginActivity.this, "Hello"+userid,
                     Toast.LENGTH_SHORT).show();
